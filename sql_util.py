@@ -2,33 +2,7 @@ import sqlite3
 from contextlib import closing
 from typing import List, Optional
 
-
-class BirdRecord:
-    def __init__(self, id=None, url=None, serial_id=None, start_time=None, user=None,
-                 location=None, number=None,status=None, is_done=None):
-        self.id = id
-        self.url = url
-        self.serial_id = serial_id
-        self.start_time = start_time
-        self.user = user
-        self.location = location
-        self.number = number
-        self.status = status
-        self.is_done = is_done
-
-
-class RecordDetail:
-    def __init__(self, id=None, bird_no=None, bird_name=None, bird_latin_name=None, bird_eng_name=None, mu=None,
-                 ke=None, num=None, record_no=None):
-        self.id = id
-        self.bird_no = bird_no
-        self.bird_name = bird_name
-        self.bird_latin_name = bird_latin_name
-        self.bird_eng_name = bird_eng_name
-        self.mu = mu
-        self.ke = ke
-        self.num = num
-        self.record_no = record_no
+from models import BirdRecord, RecordDetail
 
 
 class SqlUtils:
@@ -43,12 +17,12 @@ class SqlUtils:
         with closing(SqlUtils.get_conn()) as conn:
             with closing(conn.cursor()) as cursor:
                 insert_sql = """
-                    INSERT INTO bird_record (url, serial_id, start_time, username, location, num, status)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO bird_record (url, serial_id, start_time, username, location, num, status,is_red)
+                    VALUES (?, ?, ?, ?, ?, ?, ?,?)
                 """
                 cursor.execute(insert_sql, (
                 record.url, record.serial_id, record.start_time, record.user, record.location, record.number,
-                record.status))
+                record.status,record.is_red))
                 conn.commit()
 
     # 插入观鸟记录明细
@@ -57,12 +31,13 @@ class SqlUtils:
         with closing(SqlUtils.get_conn()) as conn:
             with closing(conn.cursor()) as cursor:
                 insert_sql = """
-                    INSERT INTO bird_record_detail (bird_no, bird_name, bird_latin_name, bird_eng_name, mu, ke, num, record_no)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO bird_record_detail (bird_no, bird_name, bird_latin_name, bird_eng_name, 
+                    mu, ke, num, record_no,is_red,has_pic)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?)
                 """
                 cursor.execute(insert_sql, (
                 detail.bird_no, detail.bird_name, detail.bird_latin_name, detail.bird_eng_name, detail.mu, detail.ke,
-                detail.num, detail.record_no))
+                detail.num, detail.record_no,detail.is_red,detail.has_pic))
                 conn.commit()
 
     # 根据观鸟记录编号查找记录
