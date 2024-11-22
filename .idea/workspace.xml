@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c1d0dfa1-3ee2-4a93-9244-0e66cbf37aca" name="更改" comment="feat：&#10;1:更新依赖">
-      <change afterPath="$PROJECT_DIR$/.idea/bird_report_tool.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bird_record.db" beforeDir="false" afterPath="$PROJECT_DIR$/bird_record.db" afterDir="false" />
+    <list default="true" id="c1d0dfa1-3ee2-4a93-9244-0e66cbf37aca" name="更改" comment="feat：&#10;1:更新数据库">
+      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sql_util.py" beforeDir="false" afterPath="$PROJECT_DIR$/sql_util.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,7 +159,10 @@
       <workItem from="1732103591521" duration="14015000" />
       <workItem from="1732202888544" duration="389000" />
       <workItem from="1732253116014" duration="2431000" />
-      <workItem from="1732288981350" duration="1972000" />
+      <workItem from="1732288981350" duration="1983000" />
+      <workItem from="1732295932362" duration="1419000" />
+      <workItem from="1732297367501" duration="152000" />
+      <workItem from="1732297527502" duration="1671000" />
     </task>
     <task id="LOCAL-00001" summary="初始化提交">
       <option name="closed" value="true" />
@@ -195,7 +196,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732115927182</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="feat：&#10;1:更新数据库">
+      <option name="closed" value="true" />
+      <created>1732295872685</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1732295872685</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -206,10 +215,11 @@
     <MESSAGE value="数据库上传" />
     <MESSAGE value="feat：&#10;1:新增是否标红记录逻辑&#10;2:新增是否有图片逻辑" />
     <MESSAGE value="feat：&#10;1:更新依赖" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat：&#10;1:更新依赖" />
+    <MESSAGE value="feat：&#10;1:更新数据库" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat：&#10;1:更新数据库" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/bird_report_tool$main.coverage" NAME="main 覆盖结果" MODIFIED="1732203182574" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/bird_report_tool$main.coverage" NAME="main 覆盖结果" MODIFIED="1732299144204" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/bird_report_tool$bird_level_info.coverage" NAME="bird_level_info 覆盖结果" MODIFIED="1732031348916" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

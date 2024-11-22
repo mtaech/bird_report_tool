@@ -2,6 +2,7 @@ import base64
 import json
 import time
 
+from dotenv import load_dotenv
 from loguru import logger
 from playwright.sync_api import sync_playwright
 
@@ -15,8 +16,8 @@ def save_data():
     with sync_playwright() as playwright:
         # 关闭无头模式，爬取过快的话会触发验证码，所以这里直接gui运行，手动过验证码
         browser = playwright.chromium.launch(headless=False)
-        # open_page(browser,0)
-        save_detail(browser)
+        open_page(browser,0)
+        # save_detail(browser)
 
 
 # outside：1 表示查询标红记录 0 表示查询正常记录
@@ -165,5 +166,6 @@ def has_pic(td):
 
 
 if __name__ == "__main__":
+    load_dotenv()
     save_data()
 

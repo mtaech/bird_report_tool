@@ -2,6 +2,9 @@ import sqlite3
 from contextlib import closing
 from typing import List, Optional
 
+import psycopg
+from dotenv import dotenv_values
+
 from models import BirdRecord, RecordDetail
 
 
@@ -9,7 +12,10 @@ class SqlUtils:
     # 获取数据连接
     @staticmethod
     def get_conn():
-        return sqlite3.connect('bird_record.db')
+        config = dotenv_values(".env")
+        return psycopg.connect(dbname=config.get("DB"), user=config.get("USER"),
+                        password=config.get("PASSWORD"), host=config.get("HOST"),
+                        port=config.get("PORT"))
 
     # 插入观鸟记录
     @staticmethod
@@ -18,7 +24,7 @@ class SqlUtils:
             with closing(conn.cursor()) as cursor:
                 insert_sql = """
                     INSERT INTO bird_record (url, serial_id, start_time, username, location, num, status,is_red)
-                    VALUES (?, ?, ?, ?, ?, ?, ?,?)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s,%s)
                 """
                 cursor.execute(insert_sql, (
                 record.url, record.serial_id, record.start_time, record.user, record.location, record.number,
@@ -33,7 +39,7 @@ class SqlUtils:
                 insert_sql = """
                     INSERT INTO bird_record_detail (bird_no, bird_name, bird_latin_name, bird_eng_name, 
                     mu, ke, num, record_no,is_red,has_pic)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?,?,?)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s,%s)
                 """
                 cursor.execute(insert_sql, (
                 detail.bird_no, detail.bird_name, detail.bird_latin_name, detail.bird_eng_name, detail.mu, detail.ke,
@@ -50,7 +56,7 @@ class SqlUtils:
                 cursor.execute("""
                     SELECT id, url, serial_id, start_time, username, location, num, status, is_done
                     FROM bird_record
-                    WHERE serial_id = ?
+                    WHERE serial_id = %s
                     ORDER BY id DESC
                     LIMIT 1
                 """, (record_no,))
@@ -94,7 +100,7 @@ class SqlUtils:
             return
         with closing(SqlUtils.get_conn()) as conn:
             with closing(conn.cursor()) as cursor:
-                cursor.execute("DELETE FROM bird_record_detail WHERE record_no = ?", (serial_id,))
+                cursor.execute("DELETE FROM bird_record_detail WHERE record_no = %s", (serial_id,))
                 conn.commit()
 
     # 更新观鸟记录状态
@@ -104,12 +110,12 @@ class SqlUtils:
             return
         with closing(SqlUtils.get_conn()) as conn:
             with closing(conn.cursor()) as cursor:
-                cursor.execute("UPDATE bird_record SET is_done = 1 WHERE serial_id = ?", (serial_id,))
+                cursor.execute("UPDATE bird_record SET is_done = 1 WHERE serial_id = %s", (serial_id,))
                 conn.commit()
 # 爬取全国保护动物信息
 def save_animal_info(contents):
     sql = ("insert into animal_info(id, species_c, ass_level, rank_cn, order_c, family_c,class_c) "
-           " values (?,?,?,?,?,?,?)")
+           " values (%s,%s,%s,%s,%s,%s,%s)")
     for content in contents:
         with closing(SqlUtils.get_conn()) as conn:
             with closing(conn.cursor()) as cursor:
