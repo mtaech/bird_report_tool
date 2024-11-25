@@ -1,6 +1,7 @@
 import base64
 import json
 import time
+from datetime import datetime
 
 from dotenv import load_dotenv
 from loguru import logger
@@ -15,9 +16,10 @@ BASE_URL = "https://www.birdreport.cn"
 def save_data():
     with sync_playwright() as playwright:
         # 关闭无头模式，爬取过快的话会触发验证码，所以这里直接gui运行，手动过验证码
-        browser = playwright.chromium.launch(headless=False)
+        browser = playwright.chromium.launch()
         open_page(browser,0)
-        # save_detail(browser)
+        save_detail(browser)
+        browser.close()
 
 
 # outside：1 表示查询标红记录 0 表示查询正常记录
@@ -32,8 +34,8 @@ def open_page(browser,outside = 0):
 def get_query(outside:int):
     obj = {
         "taxonid": "",
-        "startTime": "2024-11-01",
-        "endTime": "2024-11-30",
+        "startTime": datetime.now().strftime("%Y-%m-01"),
+        "endTime": "",
         "province": "江西省",
         "city": "",
         "district": "",
@@ -82,7 +84,7 @@ def save_record(browser, page):
             SqlUtils.insert_record(record)
             logger.info(f"编号 {record.serial_id} 保存成功")
             if record.url is not None and len(record.url) > 0:
-                time.sleep(2)
+                time.sleep(1)
 
     # 本页保存结束，进入下一页保存
     if can_next(page):
@@ -166,6 +168,7 @@ def has_pic(td):
 
 
 if __name__ == "__main__":
+    logger.add("bird_report.log")
     load_dotenv()
     save_data()
 
