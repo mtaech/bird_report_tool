@@ -31,6 +31,13 @@ class SqlUtils:
                 record.status,record.is_red))
                 conn.commit()
 
+    @staticmethod
+    def update_done_status(record_no:str):
+        with closing(SqlUtils.get_conn()) as conn:
+            with closing(conn.cursor()) as cursor:
+                cursor.execute("UPDATE bird_record SET is_done = 0 WHERE serial_id = %s", (record_no,))
+                conn.commit()
+
     # 插入观鸟记录明细
     @staticmethod
     def insert_detail(detail: RecordDetail):

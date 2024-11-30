@@ -16,7 +16,7 @@ BASE_URL = "https://www.birdreport.cn"
 def save_data():
     with sync_playwright() as playwright:
         # 关闭无头模式，爬取过快的话会触发验证码，所以这里直接gui运行，手动过验证码
-        browser = playwright.chromium.launch()
+        browser = playwright.chromium.launch(headless=False)
         open_page(browser,0)
         save_detail(browser)
         browser.close()
@@ -85,6 +85,10 @@ def save_record(browser, page):
             logger.info(f"编号 {record.serial_id} 保存成功")
             if record.url is not None and len(record.url) > 0:
                 time.sleep(1)
+        elif bird_record.number != record.number:
+            SqlUtils.update_done_status(record.serial_id)
+            logger.info(f"编号 {record.serial_id} 标记为重新更新")
+
 
     # 本页保存结束，进入下一页保存
     if can_next(page):
