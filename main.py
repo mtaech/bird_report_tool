@@ -17,7 +17,7 @@ BASE_URL = "https://www.birdreport.cn"
 def save_data():
     with sync_playwright() as playwright:
         # 关闭无头模式，爬取过快的话会触发验证码，所以这里直接gui运行，手动过验证码
-        browser = playwright.chromium.launch(headless=False)
+        browser = playwright.chromium.launch(headless=True)
         open_page(browser,1)
         save_detail(browser)
         browser.close()
