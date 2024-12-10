@@ -130,3 +130,23 @@ def save_animal_info(contents):
                     content['id'], content['speciesC'], content['assLevel'],
                     content['rankCn'], content['orderC'], content['familyC'],content["classC"]))
                 conn.commit()
+
+
+def find_no_gps_list() -> List[BirdRecord]:
+    with closing(SqlUtils.get_conn()) as conn:
+        with closing(conn.cursor()) as cursor:
+            cursor.execute("""
+                SELECT id, url, serial_id, start_time, username, location, num, status, is_done,gps
+                FROM bird_record
+                WHERE gps is null
+            """)
+            rows = cursor.fetchall()
+            return [SqlUtils.get_record(row) for row in rows]
+
+def set_gps(serial_id: str,gps:str):
+    if not serial_id:
+        return
+    with closing(SqlUtils.get_conn()) as conn:
+        with closing(conn.cursor()) as cursor:
+            cursor.execute("UPDATE bird_record SET gps = %s WHERE serial_id = %s", (gps,serial_id,))
+            conn.commit()

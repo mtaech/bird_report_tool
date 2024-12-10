@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from loguru import logger
 from playwright.sync_api import sync_playwright
 
+from location_utils import set_gps_for_rec
 from models import RecordDetail, BirdRecord
 from sql_util import SqlUtils
 
@@ -17,7 +18,7 @@ def save_data():
     with sync_playwright() as playwright:
         # 关闭无头模式，爬取过快的话会触发验证码，所以这里直接gui运行，手动过验证码
         browser = playwright.chromium.launch(headless=False)
-        open_page(browser,0)
+        open_page(browser,1)
         save_detail(browser)
         browser.close()
 
@@ -29,6 +30,7 @@ def open_page(browser,outside = 0):
     url = f"https://www.birdreport.cn/home/search/report.html?search={query}"
     page.goto(url)
     save_record(browser, page)
+    page.close()
 
 # 查询条件base64
 def get_query(outside:int):
@@ -79,15 +81,16 @@ def save_record(browser, page):
             record.url = url
             record.is_red = has_red(url_handle)
 
-        bird_record = SqlUtils.find_record(record.serial_id)
-        if bird_record is None:
-            SqlUtils.insert_record(record)
-            logger.info(f"编号 {record.serial_id} 保存成功")
-            if record.url is not None and len(record.url) > 0:
-                time.sleep(1)
-        elif bird_record.number != record.number:
-            SqlUtils.update_done_status(record.serial_id)
-            logger.info(f"编号 {record.serial_id} 标记为重新更新")
+        if record.user != '***':
+            bird_record = SqlUtils.find_record(record.serial_id)
+            if bird_record is None:
+                SqlUtils.insert_record(record)
+                logger.info(f"编号 {record.serial_id} 保存成功")
+                if record.url is not None and len(record.url) > 0:
+                    time.sleep(1)
+            elif bird_record.number != record.number:
+                SqlUtils.update_done_status(record.serial_id)
+                logger.info(f"编号 {record.serial_id} 标记为重新更新")
 
 
     # 本页保存结束，进入下一页保存
@@ -175,4 +178,5 @@ if __name__ == "__main__":
     logger.add("bird_report.log")
     load_dotenv()
     save_data()
+    set_gps_for_rec()
 
