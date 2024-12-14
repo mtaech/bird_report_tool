@@ -6,13 +6,14 @@ import psycopg
 from dotenv import dotenv_values
 
 from models import BirdRecord, RecordDetail
+from utils import get_env_path
 
 
 class SqlUtils:
     # 获取数据连接
     @staticmethod
     def get_conn():
-        config = dotenv_values(".env")
+        config = dotenv_values(get_env_path())
         return psycopg.connect(dbname=config.get("DB"), user=config.get("USER"),
                         password=config.get("PASSWORD"), host=config.get("HOST"),
                         port=config.get("PORT"))

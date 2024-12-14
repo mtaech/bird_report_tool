@@ -7,10 +7,11 @@ import hashlib
 from dotenv import dotenv_values
 
 from sql_util import find_no_gps_list, set_gps
+from utils import get_env_path
 
 
 def get_gps(addr):
-    config = dotenv_values(".env")
+    config = dotenv_values(get_env_path())
     # 服务地址
     host = "https://api.map.baidu.com"
     # 接口地址

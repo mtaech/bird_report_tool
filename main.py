@@ -10,6 +10,7 @@ from playwright.sync_api import sync_playwright
 from location_utils import set_gps_for_rec
 from models import RecordDetail, BirdRecord
 from sql_util import SqlUtils
+from utils import get_env_path
 
 BASE_URL = "https://www.birdreport.cn"
 
@@ -18,6 +19,7 @@ def save_data():
     with sync_playwright() as playwright:
         # 关闭无头模式，爬取过快的话会触发验证码，所以这里直接gui运行，手动过验证码
         browser = playwright.chromium.launch(headless=True)
+        open_page(browser,0)
         open_page(browser,1)
         save_detail(browser)
         browser.close()
@@ -176,7 +178,7 @@ def has_pic(td):
 
 if __name__ == "__main__":
     logger.add("bird_report.log")
-    load_dotenv()
+    load_dotenv(get_env_path())
     save_data()
     set_gps_for_rec()
 
